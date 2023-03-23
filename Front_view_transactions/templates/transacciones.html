@@ -1,0 +1,100 @@
+{% extends "template.html" %}
+
+
+{% set color = 'teal' %}
+{% set color_code = '#38b2ac' %}
+
+{% block title %}{{'Movimientos'}}{% endblock %}
+
+{% block content %}
+<p class="text-center text-gray-700 p-10 text-4xl">Movimientos</p>
+{%if saldo > 0%}
+<div class="alert alert-info mx-lg-5 " role="alert">
+    <div class="font-bold text-xxl mx-5 px-5 mb-2 mt-2" style="color:rgb(21, 15, 210)">Saldo total:
+        {{saldo}}</div>
+</div>
+{% endif %}
+{%if saldo <= 0%} <div class="alert alert-danger mx-lg-5 " role="alert">
+    <div class="font-bold text-xxl mx-5 px-5 mb-2 mt-2" style="color:rgb(21, 15, 210)">Saldo total:
+        {{saldo}}</div>
+    </div>
+    {% endif %}
+    <div class="w-11/12 mx-auto p-2 my-12">
+        <div class="shadow-lg">
+            <div class="tab w-full overflow-hidden border-t">
+                <div class="tab-content overflow-hidden border-l-2 bg-gray-100 border-{{color}}-500 leading-normal">
+                    <div class="flex flex-wrap">
+                        {% for transaccion in transacciones %}
+                        <div class="m-3 bg-white min-w-0 rounded shadow-lg">
+                            <div class="container text-left">
+                                {% if transaccion.type == 'Salida' %}
+                                <div class="row">
+                                    <div class="col-md-auto" style="color:rgb(21, 15, 210)">Valor:
+                                    </div>
+                                    <div class="col-md-auto" style="color:rgb(192, 27, 27)">
+                                        -{{transaccion.value}}</div>
+                                </div>
+                                {% endif %}
+                                {% if transaccion.type == 'Entrada' %}
+                                <div class="row">
+                                    <div class="col-md-auto" style="color:rgb(21, 15, 210)">Valor:
+                                    </div>
+                                    <div class="col-md-auto" style="color:rgb(27, 192, 180)">
+                                        +{{transaccion.value}}</div>
+                                </div>
+                                {% endif %}
+                                <div class="row"></div>
+                                <div class="col-md-auto" style="color:rgb(21, 15, 210)">Fecha del movimiento:
+                                    {{ "-".join(transaccion.created_at.split("T")[0].split("-")[::-1]) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-auto mx-5 px-5 mb-2 mt-2">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#{{loop.index}}">
+                                        Detalles
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="{{loop.index}}" tabindex="-1"
+                                        aria-labelledby="{{loop.index}}Label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="{{loop.index}}Label">Detalles</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="container text-left">
+                                                        <div class="row">
+                                                            <div class="col-md-auto mx-5 px-4 mb-2 mt-2"
+                                                                style="color:rgb(21, 15, 210)"> Cliente:
+                                                                {{ transaccion.cliente }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-auto mx-5 px-4 mb-2 mt-2 "
+                                                                style="color:rgb(21, 15, 210)">Detalles:
+                                                                {{ transaccion.detalles }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endblock %}
